@@ -1,0 +1,164 @@
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>
+      Intro to MapView - Create a 2D map | Sample | ArcGIS API for JavaScript
+      4.19
+    </title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      
+      #div1 {
+        background: #00FFFF;
+        border: thin solid red;
+        height: 15%;
+      }
+      
+      #div2 {
+      background: #98FB98;
+        border: thin solid black;
+        height: 85%;
+        width: 69%;
+        float: left;
+      }
+      
+      #div3 {
+      background: #00FF7F;
+        border: thin solid blue;
+        height: 85%;
+        width: 30%;
+        float: right;
+      }
+      
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.19/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.19/"></script>
+
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/layers/TileLayer",
+        "esri/widgets/Legend",
+        "esri/widgets/ScaleBar",
+        "esri/widgets/BasemapGallery",
+        "esri/widgets/Search",
+        "esri/widgets/LayerList"
+      ], (
+        Map,
+        MapView,
+        FeatureLayer,
+        TileLayer,
+        Legend,
+        ScaleBar,
+        BasemapGallery,
+        Search,
+        LayerList
+      ) => {
+        const flayer = new FeatureLayer({
+          url:
+            "http://www.arcgisonline.cn/server/rest/services/Hosted/%E5%8E%9F985%E3%80%81211%E5%A4%A7%E5%AD%A6%E5%88%86%E5%B8%83%E6%83%85%E5%86%B5/FeatureServer"
+        });
+        const tiledlayer = new TileLayer({
+          url:
+            "https://tiles.arcgis.com/tiles/nzS0F0zdNLvs7nc8/arcgis/rest/services/China_PopDens_2020/MapServer"
+        });
+
+        const map = new Map({
+          basemap: "topo",
+          layers: [flayer, tiledlayer]
+        });
+
+        const view = new MapView({
+          container: "div2",
+          map: map,
+          zoom: 13,
+          center: [116.35, 40] // longitude, latitude
+        });
+
+        const legend = new Legend({
+          view: view,
+          layerInfos: [
+            {
+              layer: flayer,
+              title: "北京原985、211分布情况"
+            }
+          ]
+        });
+
+        view.ui.add(legend, "bottom-right");
+
+        const scaleBar = new ScaleBar({
+          view: view,
+          style: "ruler",
+          unit: "metric"
+        });
+        
+        const searchWidget = new Search({
+                view: view
+            });
+          view.ui.add(searchWidget, {
+                position: "top-left",
+                index: 2
+          });
+                
+                
+        const layerList = new LayerList({
+                view: view
+            });
+            view.ui.add(layerList, {
+                position: "top-left"
+            });
+
+        view.ui.add(scaleBar, {
+          position: "bottom-left"
+        });
+
+const basemapGallery = new BasemapGallery(
+          {
+            container: "div3",
+            showArcGISBasemaps: true,
+            view: view
+          },
+          "div3"
+        );
+        
+        view.ui.add(basemapGallery, {
+          position: "top-center"
+        });
+
+        
+       
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="div1">
+      <h1><small>邓超3185706043</small><small></br>要素图层：北京原985、211分布</small></br><small>切片图层：2020人口密度</small></h1>
+    </div>
+
+    <div id="div2">
+   </div>
+    
+    <div id="div3">
+    </div>
+  </body>
+</html>
